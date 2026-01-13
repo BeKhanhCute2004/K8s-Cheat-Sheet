@@ -136,3 +136,52 @@ networks:
   frontend_net:
   backend_net:
     internal: true
+
+
+## ⚙️ 6. Quản lý Tài nguyên (Resource Constraints - Cgroups)
+
+Về bản chất, Docker không tự giới hạn tài nguyên mà nó yêu cầu Linux Kernel sử dụng **Cgroups** để kiểm soát các tiến trình. Dưới đây là các cờ quan trọng để cấu hình hạn ngạch:
+
+### 🧠 Bộ nhớ (Memory)
+| Flag | Giải thích |
+| :--- | :--- |
+| `--memory` (hoặc `-m`) | **Hard limit:** Giới hạn RAM tối đa. Nếu container vượt quá, nó sẽ bị Kernel tiêu diệt (OOM Kill). |
+| `--memory-reservation` | **Soft limit:** Giới hạn đảm bảo. Container có thể dùng quá mức này khi máy rảnh, nhưng khi hệ thống thiếu RAM, Kernel sẽ ép container lùi về mức này. |
+| `--memory-swap` | Tổng lượng **RAM + Swap** khả dụng. Ví dụ: `--memory=512m --memory-swap=1g` nghĩa là container có 512MB RAM và 512MB Swap. |
+
+### ⚡ Vi xử lý (CPU)
+| Flag | Giải thích |
+| :--- | :--- |
+| `--cpus` | Giới hạn số lượng nhân CPU. Ví dụ: `0.5` (nửa nhân), `2.0` (2 nhân). |
+| `--cpu-shares` | **Trọng số ưu tiên (Default: 1024):** Khi các container tranh chấp CPU, hệ thống chia tài nguyên theo tỉ lệ của con số này. |
+| `--cpuset-cpus` | **Cố định nhân:** Chỉ cho phép container chạy trên các nhân cụ thể. Ví dụ: `0,1` (nhân 0 và 1), `0-3` (nhân 0 đến 3). |
+
+
+
+### 💾 Ổ đĩa (Block I/O)
+Giới hạn tốc độ đọc/ghi (Thường áp dụng cho thiết bị cụ thể như `/dev/sda`).
+| Flag | Giải thích |
+| :--- | :--- |
+| `--device-read-bps` | Giới hạn băng thông đọc (Bytes/giây). VD: `--device-read-bps /dev/sda:10mb`. |
+| `--device-write-bps` | Giới hạn băng thông ghi (Bytes/giây). VD: `--device-write-bps /dev/sda:10mb`. |
+| `--device-read-iops` | Giới hạn số lượng tác vụ đọc/giây (IOPS). |
+| `--device-write-iops` | Giới hạn số lượng tác vụ ghi/giây (IOPS). |
+
+### 🌐 Mạng (Network)
+* **Lưu ý:** Docker Engine phiên bản Community (CE) mặc định **không** có flag `--network-add-limit`. 
+* Để giới hạn băng thông mạng trong Docker, bạn thường phải dùng công cụ `tc` (Traffic Control) của Linux bên trong container hoặc sử dụng các Driver Network nâng cao.
+
+---
+
+## 🛠️ Cách kiểm tra thông số Cgroups thực tế
+Bạn có thể xác nhận Docker đã thiết lập các giới hạn này vào Kernel bằng cách truy cập hệ thống file ảo `/sys/fs/cgroup/`:
+
+```bash
+# Lấy ID đầy đủ của container
+export CID=$(docker ps -q --no-trunc -l)
+
+# Kiểm tra giới hạn RAM (đơn vị: Bytes)
+cat /sys/fs/cgroup/memory/docker/$CID/memory.limit_in_bytes
+
+# Kiểm tra nhân CPU được cấp phát
+cat /sys/fs/cgroup/cpuset/docker/$CID/cpuset.cpus
