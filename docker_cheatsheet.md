@@ -136,7 +136,7 @@ networks:
   frontend_net:
   backend_net:
     internal: true
-
+```
 
 ## ⚙️ 6. Quản lý Tài nguyên (Resource Constraints - Cgroups)
 
@@ -185,3 +185,4 @@ cat /sys/fs/cgroup/memory/docker/$CID/memory.limit_in_bytes
 
 # Kiểm tra nhân CPU được cấp phát
 cat /sys/fs/cgroup/cpuset/docker/$CID/cpuset.cpus
+```
