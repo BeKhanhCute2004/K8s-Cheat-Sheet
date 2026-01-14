@@ -130,7 +130,7 @@ sudo kubeadm init \
 - --pod-network-cidr: Định nghĩa dải địa chỉ IP cho các Pod. Ví dụ: nếu bạn dùng Calico, thường sẽ đặt là 192.168.0.0/16.
 - --service-cidr: Định nghĩa dải địa chỉ IP cho các Service (các IP ảo để truy cập ứng dụng).
 - --upload-certs: Tự động tải các chứng chỉ bảo mật lên cụm để nếu bạn có thêm máy Master thứ 2 hoặc thứ 3, chúng có thể tự đồng bộ chứng chỉ về.
-- --apiserver-cert-extra-sans: Thêm các tên miền hoặc IP bổ sung vào chứng chỉ SSL của API Server (giúp bạn có thể điều khiển cluster từ xa một cách an toàn qua các IP khác).
+- --apiserver-cert-extra-sans: Thêm các tên miền hoặc IP bổ sung vào chứng chỉ SSL của API Server (giúp bạn có thể điều khiển cluster từ xa một cách an toàn qua các IP khác). Lời khuyên: nên add vào IP + hostname của tất cả Master Node, IP Load Balance, Domain name public, IP mặt ngoài (public).
 
 #### Configure Token
 ```bash
