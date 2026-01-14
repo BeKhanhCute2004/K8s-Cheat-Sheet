@@ -128,4 +128,10 @@ kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/custom-resources.yaml
 ```
 
-
+* Configure Token
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+Mục đích chính của các câu lệnh này là cấp quyền cho người dùng bình thường (không phải root) có thể sử dụng lệnh kubectl để quản lý cụm Cluster.
