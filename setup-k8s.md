@@ -69,3 +69,38 @@ Tạo thư mục cấu hình /etc/containerd.
 containerd config default | tee /etc/containerd/config.toml tạo file cấu hình mặc định cho containerd.
 
 Sử dụng vi để chỉnh sửa file /etc/containerd/config.toml, thay đổi giá trị SystemdCgroup thành true ở dòng 137 để containerd sử dụng cgroup của systemd, giúp quản lý tài nguyên hệ thống một cách hiệu quả hơn.
+
+### Install Dependency
+Dependency need to install: docker, kubeadm, kubelet
+* Add GPG key for Kubernetes repository
+```bash
+apt-get install ca-certificates curl gnupg lsb-release apt-transport-https gpg
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+```
+
+* Add Kubernetes repository
+```bash
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+```
+
+* Update repository
+```bash
+apt update -y
+reboot
+```
+
+* Install dependency components
+```bash
+apt install -y kubelet=1.29.1-1.1 kubeadm=1.29.1-1.1 kubectl=1.29.1-1.1
+```
+
+* Hold Kubernetes components version
+```bash
+apt-mark hold kubelet kubeadm kubectl
+```
+
+* Enable kubelet service
+```bash
+systemctl enable --now kubelet
+```
