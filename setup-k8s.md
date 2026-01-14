@@ -132,12 +132,6 @@ sudo kubeadm init \
 - --upload-certs: Tự động tải các chứng chỉ bảo mật lên cụm để nếu bạn có thêm máy Master thứ 2 hoặc thứ 3, chúng có thể tự đồng bộ chứng chỉ về.
 - --apiserver-cert-extra-sans: Thêm các tên miền hoặc IP bổ sung vào chứng chỉ SSL của API Server (giúp bạn có thể điều khiển cluster từ xa một cách an toàn qua các IP khác).
 
-#### Apply overlay networking
-```bash
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.2/manifests/custom-resources.yaml
-```
-
 #### Configure Token
 ```bash
 mkdir -p $HOME/.kube
@@ -153,12 +147,12 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 https://kubernetes.io/docs/concepts/cluster-administration/addons/
 ```
 
-Lựa chọn 1: Cài đặt Flannel (Đơn giản nhất)
+#### Lựa chọn 1: Cài đặt Flannel (Đơn giản nhất)
 ```bash
 kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 ```
 
-Lựa chọn 2: Cài đặt Calico (Phổ biến, bảo mật cao)
+#### Lựa chọn 2: Cài đặt Calico (Phổ biến, bảo mật cao)
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
 kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
