@@ -150,9 +150,10 @@ kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/
 
 Lựa chọn 2: Cài đặt Calico (Phổ biến, bảo mật cao)
 ```bash
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/tigera-operator.yaml
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/manifests/custom-resources.yaml
 ```
+create khác apply ở chỗ từ lần chạy thứ 2 apply sẽ tự động ghi đè còn create kiểm tra thấy thì sẽ báo lỗi => nên dùng apply hơn
 
 * Join Cluster
 ```bash
