@@ -107,7 +107,6 @@ Tại sao Kubernetes cần cái này? Trong cụm K8s, các thành phần như k
 systemctl enable --now kubelet
 ```
 
-### Setup cho Master Node
 #### Bootstraping Master
 * Bootstraping master using kubeadm
 ```bash
@@ -155,12 +154,13 @@ kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.27.0/
 ```
 create khác apply ở chỗ từ lần chạy thứ 2 apply sẽ tự động ghi đè còn create kiểm tra thấy thì sẽ báo lỗi => nên dùng apply hơn
 
+#### Worker Node join Cluster
 * Join Cluster
 ```bash
 kubeadm join 172.26.9.10:6443 --token 551p5f.95n94jwhkh7zxi0y \
     --discovery-token-ca-cert-hash sha256:c7da60f995cfbbd72f98b80378dd8bc048bdc8849148a6d1d90636dda716fd31
 ```
-nếu quên lưu hoặc token hết hạn có thể dùng lệnh này
+* nếu quên lưu hoặc token hết hạn có thể dùng lệnh này
 ```bash
 kubeadm token create --print-join-command
 ```
