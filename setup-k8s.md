@@ -188,3 +188,111 @@ sudo kubeadm init phase upload-certs --upload-certs
 
 kubeadm token create --print-join-command --certificate-key <mã-key-vừa-lấy-ở-bước-1>
 ```
+
+## Cluster Upgrades
+
+### Upgrade Commands For First Master Node
+```bash
+# Check current version
+kubectl version
+
+# Add new repository
+apt-get install ca-certificates curl gnupg lsb-release apt-transport-https gpg
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/`enter new version`/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+# Update repository
+apt update -y
+
+# Upgrade kubeadm
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm && \
+apt-mark hold kubeadm
+
+# Plan upgrade
+kubeadm upgrade plan
+
+# Apply upgrade
+kubeadm upgrade apply `new version`
+
+# Upgrade node
+kubeadm upgrade node
+
+# Upgrade kubelet and kubectl
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=`new version` kubectl=`new version` && \
+apt-mark hold kubelet kubectl
+
+# Restart kubelet
+systemctl daemon-reload
+systemctl restart kubelet
+```
+
+### Upgrade Commands For Other Master Node
+```bash
+# Check current version
+kubectl version
+
+# Add new repository
+apt-get install ca-certificates curl gnupg lsb-release apt-transport-https gpg
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/`enter new version`/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+# Update repository
+apt update -y
+
+# Upgrade kubeadm
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm && \
+apt-mark hold kubeadm
+
+# Upgrade node
+kubeadm upgrade node
+
+# Upgrade kubelet and kubectl
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=`new version` kubectl=`new version` && \
+apt-mark hold kubelet kubectl
+
+# Restart kubelet
+systemctl daemon-reload
+systemctl restart kubelet
+```
+
+### Upgrade Commands For Other Master Node
+```bash
+# Check current version
+kubectl version
+
+# Drain node (It includes cordon)
+kubectl drain <tên-worker-node> --ignore-daemonsets
+
+# Add new repository
+apt-get install ca-certificates curl gnupg lsb-release apt-transport-https gpg
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/`enter new version`/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+# Update repository
+apt update -y
+
+# Upgrade kubeadm
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm && \
+apt-mark hold kubeadm
+
+# Upgrade node
+kubeadm upgrade node
+
+# Upgrade kubelet and kubectl
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=`new version` kubectl=`new version` && \
+apt-mark hold kubelet kubectl
+
+# Restart kubelet
+systemctl daemon-reload
+systemctl restart kubelet
+
+# Uncordon node
+kubectl uncordon <tên-worker-node>
+```
+---
