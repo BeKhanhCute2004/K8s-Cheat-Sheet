@@ -338,6 +338,7 @@ kubectl exec -c container-name nginx-pod -- ps aux
 kubectl delete pod nginx-pod
 kubectl delete pod nginx-pod --force --grace-period=0
 kubectl delete pods -l app=nginx
+kubectl delete -f [file manifest].yml => best practice
 
 # Port forward
 kubectl port-forward pod/nginx-pod 8080:80
