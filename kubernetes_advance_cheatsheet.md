@@ -3355,6 +3355,11 @@ kubectl apply -f backup.yaml
 # Check current version
 kubectl version
 
+# Add new repository
+apt-get install ca-certificates curl gnupg lsb-release apt-transport-https gpg
+sudo mkdir -m 0755 -p /etc/apt/keyrings
+curl -fsSL https://pkgs.k8s.io/core:/stable:/`enter new version`/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
 # Upgrade kubeadm
 apt-mark unhold kubeadm && \
 apt-get update && apt-get install -y kubeadm=1.24.0-00 && \
