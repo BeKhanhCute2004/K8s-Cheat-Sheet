@@ -336,8 +336,24 @@ kubectl apply -f metallb-config.yaml
 ```
 
 #### Setup NGINX Ingress by Helm 
+Điều kiện, phải cài đặt Helm trên Node Controller, chạy lệnh dưới trên Controller luôn.
 ```bash
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 helm install [RELEASE_NAME] ingress-nginx/ingress-nginx
+```
+(Cài đặt Helm nếu chưa có)
+```bash
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+```
+#### Check Ingress Controller Running
+```bash
+kubectl get pods -n ingress-nginx
+```
+
+#### Create Deployment (app.yaml)
+```bash
+kubectl get pods -n ingress-nginx
 ```
