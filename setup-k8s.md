@@ -352,8 +352,43 @@ chmod 700 get_helm.sh
 ```bash
 kubectl get pods -n ingress-nginx
 ```
-
-#### Create Deployment (app.yaml)
+#### Create Deployment For Test (app.yaml)
 ```bash
-kubectl get pods -n ingress-nginx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: demo
+        image: hashicorp/http-echo:0.2.3
+        args:
+        - "-text=Hello from Demo App"
+        ports:
+        - containerPort: 5678
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+spec:
+  selector:
+    app: demo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5678
+  type: ClusterIP
 ```
+```bash
+kubectl apply -f app.yaml
+
