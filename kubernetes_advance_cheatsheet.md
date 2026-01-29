@@ -901,9 +901,9 @@ kubectl create configmap app-config --from-literal=key=value --dry-run=client -o
 # ConfigMap with literal values
 apiVersion: v1
 kind: ConfigMap
-meta
+metadata:
   name: app-config
-
+data:
   database.host: "localhost"
   database.port: "5432"
   log.level: "info"
@@ -913,9 +913,9 @@ meta
 # ConfigMap with file content
 apiVersion: v1
 kind: ConfigMap
-meta
+metadata:
   name: nginx-config
-
+data:
   nginx.conf: |
     server {
         listen 80;
@@ -931,7 +931,7 @@ meta
 # ConfigMap with multiple files
 apiVersion: v1
 kind: ConfigMap
-meta
+metadata:
   name: app-config-files
 data:
   app.properties: |
@@ -975,7 +975,7 @@ kubectl create secret generic encoded-secret --from-literal=username=YWRtaW4= --
 # Generic Secret
 apiVersion: v1
 kind: Secret
-meta
+metadata:
   name: db-secret
 type: Opaque
 
@@ -987,7 +987,7 @@ type: Opaque
 # TLS Secret
 apiVersion: v1
 kind: Secret
-meta
+metadata:
   name: nginx-tls
 type: kubernetes.io/tls
 
@@ -999,7 +999,7 @@ type: kubernetes.io/tls
 # Docker Registry Secret
 apiVersion: v1
 kind: Secret
-meta
+metadata:
   name: regcred
 type: kubernetes.io/dockerconfigjson
 
